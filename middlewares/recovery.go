@@ -11,8 +11,8 @@ func NewRecovery() gin.HandlerFunc {
 }
 
 func recoveryHandler(c *gin.Context, err interface{}) {
-	c.HTML(500, "error.tmpl", gin.H{
+	c.HTML(500, "err.tmpl", gin.H{
 		"title": "Error",
-		"error": err,
+		"err": err,
 	})
 }

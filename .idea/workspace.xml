@@ -3,11 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a1f85105-98ef-47c5-aa3b-e1bca2ead06d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/todo.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/todo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/model/todo.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/todo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/repository/todo_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/todo_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/repository/user_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/user_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middlewares/recovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/middlewares/recovery.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +66,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="526" y="215" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1584230156692" />
+    <state x="552" y="121" key="#com.intellij.ide.util.MemberChooser" timestamp="1584239856353">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="552" y="121" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1584239856353" />
     <state x="548" y="153" key="FileChooserDialogImpl" timestamp="1584160218043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
