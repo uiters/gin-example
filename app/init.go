@@ -5,6 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"mgo-gin/app/api"
 	"mgo-gin/db"
+	"mgo-gin/middlewares"
 )
 
 type Routes struct{
@@ -18,6 +19,13 @@ func (app Routes) StartGin() {
 	if err!=nil{
 		logrus.Print(err)
 	}
+	
+	r.Use(middlewares.NewRecovery())
+	r.Use(middlewares.NewCors([]string{"*"}))
+	r.NoRoute(func(context *gin.Context) {
+		context.File("./template/route_not_found.html")
+	})
+
 	api.ApplyToDoAPI(publicRoute,resource)
 	r.Run(":8585")
 }
