@@ -2,8 +2,11 @@ package middlewares
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"mgo-gin/app/model"
+	"net/http"
+	"strings"
 	"time"
 )
 
@@ -19,7 +22,7 @@ type Claims struct {
 func GenerateJWTToken(user model.User) string {
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(24 * time.Hour)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
 		Username: user.Username,
@@ -38,4 +41,33 @@ func GenerateJWTToken(user model.User) string {
 		logrus.Print(err)
 	}
 	return tokenString
+}
+
+func RequireAuth()  gin.HandlerFunc {
+	return func (c *gin.Context){
+		token:=c.GetHeader("Authorization")
+		if token ==""{
+			c.Abort()
+			c.Writer.WriteHeader(http.StatusUnauthorized)
+		}
+		jwtToken :=strings.Split(token,"Bearer ")
+		// Initialize a new instance of `Claims`
+		claims := &Claims{}
+		tkn, err := jwt.ParseWithClaims(jwtToken[1], claims, func(token *jwt.Token) (interface{}, error) {
+			return jwtKey, nil
+		})
+
+		if err != nil {
+			if err == jwt.ErrSignatureInvalid {
+				c.Abort()
+				c.Writer.WriteHeader(http.StatusUnauthorized)
+			}
+			c.Abort()
+			c.Writer.WriteHeader(http.StatusBadRequest)
+		}
+		if !tkn.Valid {
+			c.Abort()
+			c.Writer.WriteHeader(http.StatusUnauthorized)
+		}
+	}
 }

@@ -17,6 +17,7 @@ func ApplyUserAPI(app *gin.RouterGroup, resource *db.Resource) {
 	authRoute.POST("/sign-up", signUp(userEntity))
 
 	userRoute := app.Group("/user")
+	userRoute.Use(middlewares.RequireAuth())
 	userRoute.GET("", getAllUSer(userEntity))
 }
 
