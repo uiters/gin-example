@@ -43,12 +43,13 @@ func GenerateJWTToken(user model.User) string {
 	return tokenString
 }
 
-func RequireAuth()  gin.HandlerFunc {
+func RequireAuthenticated()  gin.HandlerFunc {
 	return func (c *gin.Context){
 		token:=c.GetHeader("Authorization")
 		if token ==""{
 			c.Abort()
 			c.Writer.WriteHeader(http.StatusUnauthorized)
+			return
 		}
 		jwtToken :=strings.Split(token,"Bearer ")
 		// Initialize a new instance of `Claims`
@@ -69,5 +70,6 @@ func RequireAuth()  gin.HandlerFunc {
 			c.Abort()
 			c.Writer.WriteHeader(http.StatusUnauthorized)
 		}
+		return
 	}
 }

@@ -10,6 +10,7 @@ import (
 func ApplyToDoAPI(app *gin.RouterGroup, resource *db.Resource){
 	toDoEntity := repository.NewToDoEntity(resource)
 	toDoRoute := app.Group("/todo")
+
 	toDoRoute.GET("", getAllToDo(toDoEntity))
 
 }
