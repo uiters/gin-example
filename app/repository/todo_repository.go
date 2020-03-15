@@ -28,7 +28,7 @@ func NewToDoEntity(resource *db.Resource) IToDo {
 }
 
 func (entity *toDoEntity) GetAll() ([]model.ToDo,int,error)  {
-	toDoList :=[]model.ToDo{}
+	toDoList := []model.ToDo{}
 	ctx, cancel := initContext()
 	defer cancel()
 	cursor,err := entity.repo.Find(ctx,bson.M{})

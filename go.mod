@@ -3,6 +3,7 @@ module mgo-gin
 go 1.14
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/ekyoung/gin-nice-recovery v0.0.0-20160510022553-1654dca486db
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-errors/errors v1.0.1 // indirect

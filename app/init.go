@@ -19,7 +19,7 @@ func (app Routes) StartGin() {
 	if err!=nil{
 		logrus.Print(err)
 	}
-	
+
 	r.Use(middlewares.NewRecovery())
 	r.Use(middlewares.NewCors([]string{"*"}))
 	r.NoRoute(func(context *gin.Context) {
@@ -27,5 +27,6 @@ func (app Routes) StartGin() {
 	})
 
 	api.ApplyToDoAPI(publicRoute,resource)
+	api.ApplyUserAPI(publicRoute,resource)
 	r.Run(":8585")
 }
