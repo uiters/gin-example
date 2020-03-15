@@ -19,7 +19,7 @@ func ApplyUserAPI(app *gin.RouterGroup, resource *db.Resource) {
 
 	userRoute := app.Group("/user")
 	userRoute.GET("/get-all", getAllUSer(userEntity))
-	userRoute.Use(middlewares.RequireAuthenticated()) // when need authentication
+	userRoute.Use(middlewares.RequireAuthenticated())               // when need authentication
 	userRoute.Use(middlewares.RequireAuthorization(constant.ADMIN)) // when need authorization
 	userRoute.GET("", getAllUSer(userEntity))
 }
@@ -53,8 +53,8 @@ func signUp(userEntity repository.IUser) func(ctx *gin.Context) {
 		}
 		user, code, err := userEntity.CreateOne(userRequest)
 		response := map[string]interface{}{
-			"user": user,
-			"error":  err2.GetErrorMessage(err),
+			"user":  user,
+			"error": err2.GetErrorMessage(err),
 		}
 		ctx.JSON(code, response)
 	}
@@ -65,7 +65,7 @@ func getAllUSer(userEntity repository.IUser) func(ctx *gin.Context) {
 		list, code, err := userEntity.GetAll()
 		response := map[string]interface{}{
 			"users": list,
-			"error":   err2.GetErrorMessage(err),
+			"error": err2.GetErrorMessage(err),
 		}
 		ctx.JSON(code, response)
 	}

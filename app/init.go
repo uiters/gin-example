@@ -8,15 +8,14 @@ import (
 	"mgo-gin/middlewares"
 )
 
-type Routes struct{
-
+type Routes struct {
 }
 
 func (app Routes) StartGin() {
 	r := gin.Default()
-	publicRoute :=r.Group("/api/v1")
-	resource, err:= db.InitResource()
-	if err!=nil{
+	publicRoute := r.Group("/api/v1")
+	resource, err := db.InitResource()
+	if err != nil {
 		logrus.Print(err)
 	}
 
@@ -26,7 +25,7 @@ func (app Routes) StartGin() {
 		context.File("./template/route_not_found.html")
 	})
 
-	api.ApplyToDoAPI(publicRoute,resource)
-	api.ApplyUserAPI(publicRoute,resource)
+	api.ApplyToDoAPI(publicRoute, resource)
+	api.ApplyUserAPI(publicRoute, resource)
 	r.Run(":8585")
 }
