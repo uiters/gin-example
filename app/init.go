@@ -16,11 +16,14 @@ func (app Routes) StartGin() {
 	publicRoute := r.Group("/api/v1")
 	resource, err := db.InitResource()
 	if err != nil {
-		logrus.Print(err)
+		logrus.Error(err)
 	}
+	defer resource.Close()
 
+	r.Use(gin.Logger())
 	r.Use(middlewares.NewRecovery())
 	r.Use(middlewares.NewCors([]string{"*"}))
+	r.GET("swagger/*any",middlewares.NewSwagger())
 	r.NoRoute(func(context *gin.Context) {
 		context.File("./template/route_not_found.html")
 	})

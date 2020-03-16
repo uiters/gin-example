@@ -60,6 +60,14 @@ func signUp(userEntity repository.IUser) func(ctx *gin.Context) {
 	}
 }
 
+// GetAllUser godoc
+// @Summary Get all user
+// @Description Get all user
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Success 200 {array} model.User
+// @Router /user [get]
 func getAllUSer(userEntity repository.IUser) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		list, code, err := userEntity.GetAll()
