@@ -16,4 +16,8 @@ Rest API with Golang, MongoDB
   - MONGO_DB_NAME = "your db name"
 
 # Run
+* `go mod download` for download dependencies
 * `go run main.go`
+
+# Swagger
+* `localhost:8585/swagger/index.html`

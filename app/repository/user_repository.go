@@ -9,6 +9,7 @@ import (
 	"mgo-gin/app/form"
 	"mgo-gin/app/model"
 	"mgo-gin/db"
+	"mgo-gin/utils/bcrypt"
 	"mgo-gin/utils/constant"
 	"net/http"
 )
@@ -22,7 +23,6 @@ type userEntity struct {
 
 type IUser interface {
 	GetAll() ([]model.User, int, error)
-	GetOneByUsernameAndPassword(userForm form.User) (model.User, int, error)
 	GetOneByUsername(username string) (*model.User, int, error)
 	CreateOne(userForm form.User) (*model.User, int, error)
 }
@@ -56,22 +56,6 @@ func (entity *userEntity) GetAll() ([]model.User, int, error) {
 	return usersList, http.StatusOK, nil
 }
 
-func (entity *userEntity) GetOneByUsernameAndPassword(userForm form.User) (model.User, int, error) {
-	ctx, cancel := initContext()
-	defer cancel()
-
-	var user model.User
-	err :=
-		entity.repo.FindOne(ctx, bson.M{"username": userForm.Username, "password": userForm.Password}, ).Decode(&user)
-
-	if err != nil {
-		logrus.Print(err)
-		return model.User{}, 400, err
-	}
-
-	return user, http.StatusOK, nil
-}
-
 func (entity *userEntity) GetOneByUsername(username string) (*model.User, int, error) {
 	ctx, cancel := initContext()
 	defer cancel()
@@ -95,7 +79,7 @@ func (entity *userEntity) CreateOne(userForm form.User) (*model.User, int, error
 	user := model.User{
 		Id:       primitive.NewObjectID(),
 		Username: userForm.Username,
-		Password: userForm.Password,
+		Password: bcrypt.HashPassword(userForm.Password),
 		Roles:    []string{constant.ADMIN, constant.USER},
 	}
 	found, _, _ := entity.GetOneByUsername(user.Username)
