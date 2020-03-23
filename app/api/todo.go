@@ -2,10 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"mgo-gin/app/form"
 	"mgo-gin/app/repository"
 	"mgo-gin/db"
 	err2 "mgo-gin/utils/err"
+	"mgo-gin/utils/firebase"
 	"net/http"
 )
 
@@ -17,6 +19,9 @@ func ApplyToDoAPI(app *gin.RouterGroup, resource *db.Resource) {
 	toDoRoute.GET("/:id", getToDoById(toDoEntity))
 	toDoRoute.POST("", createToDo(toDoEntity))
 	toDoRoute.PUT("/:id", updateToDo(toDoEntity))
+
+	testRoute := app.Group("/todo")
+	testRoute.POST("/test", upload())
 }
 
 func getAllToDo(toDoEntity repository.IToDo) func(ctx *gin.Context) {
@@ -73,5 +78,18 @@ func updateToDo(toDoEntity repository.IToDo) func(ctx *gin.Context) {
 			"err":  err2.GetErrorMessage(err),
 		}
 		ctx.JSON(code, response)
+	}
+}
+
+func upload() func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+
+		username:=ctx.PostForm("username")
+		logrus.Print(username)
+		err :=firebase.PushNotification(username)
+		response := map[string]interface{}{
+			"err": err2.GetErrorMessage(err),
+		}
+		ctx.JSON(200, response)
 	}
 }
