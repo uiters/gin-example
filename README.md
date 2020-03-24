@@ -4,6 +4,8 @@ Rest API with Golang, MongoDB
 # Feature
 * CRUD API
 * Authentication, Authorization
+* CORS
+* Auto generate Swagger Docs with annotations
 
 # Technologies
 * [Gin](https://github.com/gin-gonic/gin)
