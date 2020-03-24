@@ -6,6 +6,7 @@ import (
 	"mgo-gin/app/api"
 	"mgo-gin/db"
 	"mgo-gin/middlewares"
+	"os"
 )
 
 type Routes struct {
@@ -30,5 +31,5 @@ func (app Routes) StartGin() {
 
 	api.ApplyToDoAPI(publicRoute, resource)
 	api.ApplyUserAPI(publicRoute, resource)
-	r.Run(":8585")
+	r.Run(":"+os.Getenv("PORT"))
 }

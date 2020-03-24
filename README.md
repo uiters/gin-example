@@ -12,6 +12,7 @@ Rest API with Golang, MongoDB
 # Set up
 * Create file .env
 * Set MongoDB URI and DB
+  - PORT = "8585" or your port
   - MONGO_HOST = "your host/ localhost:27017"
   - MONGO_DB_NAME = "your db name"
   
