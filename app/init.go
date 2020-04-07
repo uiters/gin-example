@@ -25,8 +25,14 @@ func (app Routes) StartGin() {
 	r.Use(middlewares.NewRecovery())
 	r.Use(middlewares.NewCors([]string{"*"}))
 	r.GET("swagger/*any",middlewares.NewSwagger())
+
+	r.Static("/template/css", "./template/css")
+	r.Static("/template/images", "./template/images")
+	//r.Static("/template", "./template")
+
 	r.NoRoute(func(context *gin.Context) {
-		context.File("./template/route_not_found.html")
+		//context.File("./template/route_not_found.html")
+		context.File("./template/index.html")
 	})
 
 	api.ApplyToDoAPI(publicRoute, resource)
