@@ -4,8 +4,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"mgo-gin/app/api"
+	"mgo-gin/app/repository"
 	"mgo-gin/db"
 	"mgo-gin/middlewares"
+	"mgo-gin/utils/constant"
 	"os"
 )
 
@@ -34,10 +36,18 @@ func (app Routes) StartGin() {
 		//context.File("./template/route_not_found.html")
 		context.File("./template/index.html")
 	})
-
+	initAllAPI()
 	api.ApplyToDoAPI(publicRoute, resource)
-	api.ApplyUserAPI(publicRoute, resource)
 	api.ApplyRoleAPI(publicRoute, resource)
 	api.ApplyUserRoleAPI(publicRoute, resource)
+	api.ApplyUserAPI(publicRoute, resource)
+	repository.UserEntity.Init()
 	r.Run(":" + os.Getenv("PORT"))
+}
+
+func initAllAPI(){
+	constant.Controller["TODO"]= "TODO"
+	constant.Controller["ROLE"]= "ROLE"
+	constant.Controller["USER"]= "USER"
+	constant.Controller["USER_ROLE"]= "USER_ROLE"
 }

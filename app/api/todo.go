@@ -13,20 +13,17 @@ import (
 	"net/http"
 )
 
-
 func ApplyToDoAPI(app *gin.RouterGroup, resource *db.Resource) {
 	toDoEntity := repository.NewToDoEntity(resource)
 	toDoRoute := app.Group("/todo")
-
 
 	toDoRoute.GET("/:id", getToDoById(toDoEntity))
 	toDoRoute.POST("", createToDo(toDoEntity))
 	toDoRoute.PUT("/:id", updateToDo(toDoEntity))
 
 	toDoRoute.Use(middlewares.RequireAuthenticated())
-	toDoRoute.Use(middlewares.RequireAuthorization(constant.TODO))
+	toDoRoute.Use(middlewares.RequireAuthorization(constant.Controller["TODO"]))
 	toDoRoute.GET("", getAllToDo(toDoEntity))
-
 
 	testRoute := app.Group("/todo")
 	testRoute.POST("/test", upload())
@@ -97,7 +94,7 @@ func uploadFile() func(ctx *gin.Context) {
 		if err != nil {
 			logrus.Print(err)
 		}
-		resp,code, err := firebase.UploadFile(*file)
+		resp, code, err := firebase.UploadFile(*file)
 		response := map[string]interface{}{
 			"resp": resp,
 			"err":  err2.GetErrorMessage(err),
