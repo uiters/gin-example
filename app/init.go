@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"mgo-gin/app/api"
+	"mgo-gin/app/form"
 	"mgo-gin/app/repository"
 	"mgo-gin/db"
 	"mgo-gin/middlewares"
@@ -41,7 +42,7 @@ func (app Routes) StartGin() {
 	api.ApplyRoleAPI(publicRoute, resource)
 	api.ApplyUserRoleAPI(publicRoute, resource)
 	api.ApplyUserAPI(publicRoute, resource)
-	repository.UserEntity.Init()
+	initDatabase()
 	r.Run(":" + os.Getenv("PORT"))
 }
 
@@ -50,4 +51,41 @@ func initAllAPI(){
 	constant.Controller["ROLE"]= "ROLE"
 	constant.Controller["USER"]= "USER"
 	constant.Controller["USER_ROLE"]= "USER_ROLE"
+}
+
+func initDatabase(){
+
+	user, _, err := repository.UserEntity.GetOneByUsername("admin")
+	if user == nil || err != nil {
+		userForm := form.User{
+			Username: "admin",
+			Password: "admin",
+		}
+		_, _, err = repository.UserEntity.CreateOne(userForm)
+	}
+
+	controller := make([]string, 0, len(constant.Controller))
+	for _, val := range constant.Controller {
+		controller = append(controller, val)
+	}
+	logrus.Println(controller)
+	for _, role := range controller {
+		roleForm := form.RoleForm{Name: role}
+		_, _, err = repository.RoleEntity.CreateOne(roleForm)
+		if err != nil {
+			continue
+		}
+	}
+
+	for _, role := range controller {
+		userRoleForm := form.UserRoleForm{
+			Username: "admin",
+			Role:     role,
+			Access:   []string{constant.GET, constant.PUT, constant.POST, constant.DELETE},
+		}
+		_, _, err = repository.UserRoleEntity.Create(userRoleForm)
+		if err != nil {
+			continue
+		}
+	}
 }

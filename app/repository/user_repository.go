@@ -10,7 +10,6 @@ import (
 	"mgo-gin/app/model"
 	"mgo-gin/db"
 	"mgo-gin/utils/bcrypt"
-	"mgo-gin/utils/constant"
 	"net/http"
 )
 
@@ -22,7 +21,6 @@ type userEntity struct {
 }
 
 type IUser interface {
-	Init() (int, error)
 	GetAll() ([]model.User, int, error)
 	GetOneByUsername(username string) (*model.User, int, error)
 	CreateOne(userForm form.User) (*model.User, int, error)
@@ -94,44 +92,4 @@ func (entity *userEntity) CreateOne(userForm form.User) (*model.User, int, error
 	}
 
 	return &user, http.StatusOK, nil
-}
-
-func (entity *userEntity) Init() (int, error) {
-	_, cancel := initContext()
-	defer cancel()
-
-	user, _, err := entity.GetOneByUsername("admin")
-	if user == nil || err != nil {
-		userForm := form.User{
-			Username: "admin",
-			Password: "admin",
-		}
-		_, _, err = entity.CreateOne(userForm)
-	}
-
-	controller := make([]string, 0, len(constant.Controller))
-	for _, val := range constant.Controller {
-		controller = append(controller, val)
-	}
-	logrus.Println(controller)
-	for _, role := range controller {
-		roleForm := form.RoleForm{Name: role}
-		_, _, err = RoleEntity.CreateOne(roleForm)
-		if err != nil {
-			continue
-		}
-	}
-
-	for _, role := range controller {
-		userRoleForm := form.UserRoleForm{
-			Username: "admin",
-			Role:     role,
-			Access:   []string{constant.GET, constant.PUT, constant.POST, constant.DELETE},
-		}
-		_, _, err = UserRoleEntity.Create(userRoleForm)
-		if err != nil {
-			continue
-		}
-	}
-	return 200, nil
 }
