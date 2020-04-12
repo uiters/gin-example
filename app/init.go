@@ -24,7 +24,7 @@ func (app Routes) StartGin() {
 	r.Use(gin.Logger())
 	r.Use(middlewares.NewRecovery())
 	r.Use(middlewares.NewCors([]string{"*"}))
-	r.GET("swagger/*any",middlewares.NewSwagger())
+	r.GET("swagger/*any", middlewares.NewSwagger())
 
 	r.Static("/template/css", "./template/css")
 	r.Static("/template/images", "./template/images")
@@ -37,5 +37,7 @@ func (app Routes) StartGin() {
 
 	api.ApplyToDoAPI(publicRoute, resource)
 	api.ApplyUserAPI(publicRoute, resource)
-	r.Run(":"+os.Getenv("PORT"))
+	api.ApplyRoleAPI(publicRoute, resource)
+	api.ApplyUserRoleAPI(publicRoute, resource)
+	r.Run(":" + os.Getenv("PORT"))
 }
