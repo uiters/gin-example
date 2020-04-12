@@ -5,8 +5,8 @@ Rest API with Golang, MongoDB
 * CRUD API
 * Authentication
 * Authorization
-    * Branch `master` for  role authorization
-    * Branch `rbac` for roll base access authorization
+    * Branch `master` for role authorization
+    * Branch `rbac` for roll base access control authorization
 * CORS
 * Auto generate Swagger Docs with annotations
 
