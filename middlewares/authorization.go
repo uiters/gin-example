@@ -3,7 +3,6 @@ package middlewares
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"mgo-gin/app/repository"
 	"mgo-gin/utils/arrays"
 	jwt2 "mgo-gin/utils/jwt"
@@ -26,21 +25,21 @@ func GetRolesFromToken(tokenReq string) (role []string) {
 	return roles
 }
 
-func RequireAuthorization(name string)  gin.HandlerFunc {
+func RequireAuthorization(name string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		username:=jwt2.GetUsername(c)
+		username := jwt2.GetUsername(c)
 		isAccessible := false
-		userRole,_,err:=repository.UserRoleEntity.GetOneByNameAndRole(username,name)
-		if err!=nil{
-			logrus.Print(err)
-			isAccessible=false
+		userRole, _, err := repository.UserRoleEntity.GetOneByNameAndRole(username, name)
+		if err != nil || userRole == nil {
+			notPermission(c)
+			return
 		}
-		access:=userRole.Access
+		access := userRole.Access
 
-		method:=c.Request.Method
+		method := c.Request.Method
 
-		if arrays.Contains(access,method){
-			isAccessible=true
+		if arrays.Contains(access, method) {
+			isAccessible = true
 		}
 
 		if isAccessible == false {
