@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -88,8 +89,8 @@ func (entity *roleEntity) CreateOne(roleForm form.RoleForm) (model.Role, int, er
 	defer cancel()
 
 	role, _, err := entity.GetOneByName(strings.ToUpper(roleForm.Name))
-	if err != nil || role == nil {
-		return model.Role{}, http.StatusBadRequest, err
+	if err == nil || role != nil {
+		return model.Role{}, http.StatusBadRequest, errors.New("this role is exist")
 	}
 
 	newRole:=model.Role{

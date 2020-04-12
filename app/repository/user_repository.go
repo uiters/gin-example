@@ -10,7 +10,6 @@ import (
 	"mgo-gin/app/model"
 	"mgo-gin/db"
 	"mgo-gin/utils/bcrypt"
-	"mgo-gin/utils/constant"
 	"net/http"
 )
 
@@ -80,7 +79,6 @@ func (entity *userEntity) CreateOne(userForm form.User) (*model.User, int, error
 		Id:       primitive.NewObjectID(),
 		Username: userForm.Username,
 		Password: bcrypt.HashPassword(userForm.Password),
-		Roles:    []string{constant.ADMIN, constant.USER},
 	}
 	found, _, _ := entity.GetOneByUsername(user.Username)
 	if found != nil {

@@ -7,10 +7,10 @@ import (
 	"mgo-gin/db"
 	"mgo-gin/middlewares"
 	"mgo-gin/utils/bcrypt"
-	"mgo-gin/utils/constant"
 	err2 "mgo-gin/utils/err"
 	"net/http"
 )
+
 
 func ApplyUserAPI(app *gin.RouterGroup, resource *db.Resource) {
 	userEntity := repository.NewUserEntity(resource)
@@ -18,10 +18,8 @@ func ApplyUserAPI(app *gin.RouterGroup, resource *db.Resource) {
 	authRoute.POST("/login", login(userEntity))
 	authRoute.POST("/sign-up", signUp(userEntity))
 
-	userRoute := app.Group("/user")
-	userRoute.GET("/get-all", getAllUSer(userEntity))
-	userRoute.Use(middlewares.RequireAuthenticated())               // when need authentication
-	userRoute.Use(middlewares.RequireAuthorization(constant.ADMIN)) // when need authorization
+	userRoute := app.Group("/users")
+	userRoute.GET("/get-all", getAllUSer(userEntity)) // when need authorization
 	userRoute.GET("", getAllUSer(userEntity))
 }
 

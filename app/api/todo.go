@@ -6,19 +6,27 @@ import (
 	"mgo-gin/app/form"
 	"mgo-gin/app/repository"
 	"mgo-gin/db"
+	"mgo-gin/middlewares"
+	"mgo-gin/utils/constant"
 	err2 "mgo-gin/utils/err"
 	"mgo-gin/utils/firebase"
 	"net/http"
 )
 
+
 func ApplyToDoAPI(app *gin.RouterGroup, resource *db.Resource) {
 	toDoEntity := repository.NewToDoEntity(resource)
 	toDoRoute := app.Group("/todo")
 
-	toDoRoute.GET("", getAllToDo(toDoEntity))
+
 	toDoRoute.GET("/:id", getToDoById(toDoEntity))
 	toDoRoute.POST("", createToDo(toDoEntity))
 	toDoRoute.PUT("/:id", updateToDo(toDoEntity))
+
+	toDoRoute.Use(middlewares.RequireAuthenticated())
+	toDoRoute.Use(middlewares.RequireAuthorization(constant.TODO))
+	toDoRoute.GET("", getAllToDo(toDoEntity))
+
 
 	testRoute := app.Group("/todo")
 	testRoute.POST("/test", upload())

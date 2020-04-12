@@ -4,8 +4,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"mgo-gin/app/repository"
+	"mgo-gin/utils/arrays"
+	jwt2 "mgo-gin/utils/jwt"
 	"net/http"
-	"strings"
 )
 
 func GetRolesFromToken(tokenReq string) (role []string) {
@@ -24,42 +26,23 @@ func GetRolesFromToken(tokenReq string) (role []string) {
 	return roles
 }
 
-func RequireAuthorization(auths ...string)  gin.HandlerFunc {
+func RequireAuthorization(name string)  gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token:=c.GetHeader("Authorization")
-		if token ==""{
-			logrus.Print("abc")
-			c.Abort()
-			c.Writer.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		jwtToken :=strings.Split(token,"Bearer ")
-		roles := GetRolesFromToken(jwtToken[1])
-		if len(roles) <= 0 {
-			invalidRequest(c)
-			return
-		}
+		username:=jwt2.GetUsername(c)
 		isAccessible := false
-		if len(roles) < len(auths) || len(roles) == len(auths) {
-			for _, auth := range auths {
-				for _, role := range roles {
-					if role == auth {
-						isAccessible = true
-						break
-					}
-				}
-			}
+		userRole,_,err:=repository.UserRoleEntity.GetOneByNameAndRole(username,name)
+		if err!=nil{
+			logrus.Print(err)
+			isAccessible=false
 		}
-		if len(roles) > len(auths) {
-			for _, role := range roles {
-				for _, auth := range auths {
-					if auth == role {
-						isAccessible = true
-						break
-					}
-				}
-			}
+		access:=userRole.Access
+
+		method:=c.Request.Method
+
+		if arrays.Contains(access,method){
+			isAccessible=true
 		}
+
 		if isAccessible == false {
 			notPermission(c)
 			return

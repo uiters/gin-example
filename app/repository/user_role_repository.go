@@ -78,14 +78,15 @@ func (entity *userRoleEntity) Create(form form.UserRoleForm) (model.UserRole, in
 		}
 	}
 	role, _, err := entity.GetOneByNameAndRole(form.Username, form.Role)
-	if err != nil || role == nil {
-		return model.UserRole{}, http.StatusBadRequest, err
+	if err == nil || role != nil {
+		return model.UserRole{}, http.StatusBadRequest, errors.New("this user_role is exist")
 	}
 
 	newRole := model.UserRole{
-		Id:     primitive.NewObjectID(),
-		Role:   form.Role,
-		Access: form.Access,
+		Id:       primitive.NewObjectID(),
+		Username: form.Username,
+		Role:     form.Role,
+		Access:   form.Access,
 	}
 	_, err = entity.repo.InsertOne(ctx, newRole)
 	if err != nil {
