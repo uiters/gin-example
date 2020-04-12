@@ -3,7 +3,10 @@ Rest API with Golang, MongoDB
 
 # Feature
 * CRUD API
-* Authentication, Authorization
+* Authentication
+* Authorization
+    * Branch `master` for  role authorization
+    * Branch `rbac` for roll base access authorization
 * CORS
 * Auto generate Swagger Docs with annotations
 
@@ -28,3 +31,4 @@ Rest API with Golang, MongoDB
 
 # Swagger
 * `localhost:8585/swagger/index.html`
+
