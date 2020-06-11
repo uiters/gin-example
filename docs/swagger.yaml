@@ -6,10 +6,6 @@ definitions:
         type: string
       password:
         type: string
-      roles:
-        items:
-          type: string
-        type: array
       username:
         type: string
     type: object
@@ -44,6 +40,8 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get all user
+      tags:
+      - UserController
 securityDefinitions:
   ApiKeyAuth:
     in: header

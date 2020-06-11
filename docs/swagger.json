@@ -32,6 +32,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "UserController"
+                ],
                 "summary": "Get all user",
                 "responses": {
                     "200": {
@@ -56,12 +59,6 @@
                 },
                 "password": {
                     "type": "string"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "username": {
                     "type": "string"
