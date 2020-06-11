@@ -67,6 +67,7 @@ func signUp(userEntity repository.IUser) func(ctx *gin.Context) {
 }
 
 // GetAllUser godoc
+// Tags UserController
 // @Summary Get all user
 // @Description Get all user
 // @Accept  json
