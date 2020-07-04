@@ -17,6 +17,12 @@ type Routes struct {
 
 func (app Routes) StartGin() {
 	r := gin.Default()
+
+	r.Use(gin.Logger())
+	r.Use(middlewares.NewRecovery())
+	r.Use(middlewares.NewCors([]string{"*"}))
+	r.GET("swagger/*any", middlewares.NewSwagger())
+	
 	publicRoute := r.Group("/api/v1")
 	resource, err := db.InitResource()
 	if err != nil {
@@ -24,10 +30,6 @@ func (app Routes) StartGin() {
 	}
 	defer resource.Close()
 
-	r.Use(gin.Logger())
-	r.Use(middlewares.NewRecovery())
-	r.Use(middlewares.NewCors([]string{"*"}))
-	r.GET("swagger/*any", middlewares.NewSwagger())
 
 	r.Static("/template/css", "./template/css")
 	r.Static("/template/images", "./template/images")
